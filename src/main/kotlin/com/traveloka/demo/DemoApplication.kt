@@ -20,13 +20,12 @@ fun main(args: Array<String>) {
 @RestController
 class DemoController(webClientBuilder: WebClient.Builder) {
 
-	private val webClient = webClientBuilder.build()
+	private val restTemplate = RestTemplate()
 
 	@GetMapping("/")
 	fun demo(@RequestParam delay: Long): Mono<String> {
-		return webClient.get()
-			.uri("http://localhost:8080/delay?delay=$delay")
-			.retrieve()
-			.bodyToMono(String::class.java)
+		return Mono.defer {
+			Mono.just(restTemplate.getForEntity("http://localhost:8080/delay?delay=$delay", String::class.java).body!!)
+		}.subscribeOn(Schedulers.elastic())
 	}
 }
