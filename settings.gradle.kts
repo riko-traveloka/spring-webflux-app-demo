@@ -1,1 +1,1 @@
-rootProject.name = "spring-webflux-app-demo"
+rootProject.name = "webflux-demo"
